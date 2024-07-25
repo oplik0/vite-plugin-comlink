@@ -1,5 +1,5 @@
 {
-  "name": "vite-plugin-comlink",
+  "name": "@opliko/vite-plugin-comlink",
   "version": "5.0.1",
   "description": "Comlink for Vite",
   "repository": {
