@@ -85,7 +85,7 @@ export function comlink(): Plugin[] {
 
           const opt = c7_options ? JSON5.parse(c7_options) : {};
 
-          const urlQuote = c4_path[0];
+          const urlQuote = ['"', '`', "'"].includes(c4_path[0]) ? c4_path[0] : "";
 
           if (mode === "development") {
             opt.type = "module";
