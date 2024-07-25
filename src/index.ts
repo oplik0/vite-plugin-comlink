@@ -62,8 +62,8 @@ export function comlink(): Plugin[] {
         )
           return;
 
-        const workerSearcher =
-          /(?<new>\bnew\s+)(?<type>ComlinkWorker|ComlinkSharedWorker)(?<new_url>\s*\(\s*new\s+URL\s*\(\s*)(?<path>'[^']+'|"[^"]+"|`[^`]+`|\w+)(?<import_meta>\s*,\s*import\.meta\.url\s*\)\s*|\s*\)\s*)(?<comma>,?)(?<options>[^\)]*)(?<end>\))/g;
+        const workerSearcher = /(?<new>\bnew\s+)(?<type>ComlinkWorker|ComlinkSharedWorker)(?<new_url>\s*\(\s*new\s+URL\s*\(\s*)['"`]?(?<path>(?=<')[^']+(?=')|(?<=")[^"]+(?=")|(?<=`)[^`]+(?=`)|\w+)['"`]?(?<import_meta>\s*,\s*import\.meta\.url\s*\)\s*|\s*\)\s*)(?<comma>,?)(?<options>[^\)]*)(?<end>\))/g;
+
 
         let s: MagicString = new MagicString(code);
 
@@ -86,8 +86,6 @@ export function comlink(): Plugin[] {
           const opt = c7_options ? JSON5.parse(c7_options) : {};
 
           const urlQuote = c4_path[0];
-
-          c4_path = c4_path.substring(1, c4_path.length - 1);
 
           if (mode === "development") {
             opt.type = "module";
