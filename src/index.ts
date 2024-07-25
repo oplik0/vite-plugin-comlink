@@ -85,7 +85,9 @@ export function comlink(): Plugin[] {
 
           const opt = c7_options ? JSON5.parse(c7_options) : {};
 
-          const urlQuote = ['"', '`', "'"].includes(c4_path[0]) ? c4_path[0] : "";
+          const urlQuote = ['"', '`', "'"].includes(c4_path[0]) ? c4_path[0] : "`";
+          const pathEscapeStart = ['"', "`", "'"].includes(c4_path[0]) ? "" : "${";
+          const pathEscapeEnd = ['"', "`", "'"].includes(c4_path[0]) ? "" : "}";
 
           if (mode === "development") {
             opt.type = "module";
@@ -106,7 +108,7 @@ export function comlink(): Plugin[] {
               path = path.substring(root.length);
             }
           }
-          const worker_constructor = `${c1_new}${className}${c3_new_url}${urlQuote}${prefix}${path}${urlQuote}${c5_import_meta},${options}${c8_end}`;
+          const worker_constructor = `${c1_new}${className}${c3_new_url}${urlQuote}${prefix}${pathEscapeStart}${path}${pathEscapeEnd}${urlQuote}${c5_import_meta},${options}${c8_end}`;
 
           const insertCode = `___wrap(${worker_constructor});\n`;
 
