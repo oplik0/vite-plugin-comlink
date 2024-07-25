@@ -117,7 +117,7 @@ export function comlink(): Plugin[] {
 
         s.appendLeft(
           0,
-          `import {wrap as ___wrap} from 'vite-plugin-comlink/symbol';\n`
+          `import {wrap as ___wrap} from '@opliko/vite-plugin-comlink/symbol';\n`
         );
 
         const prevSourcemapConsumer = await new SourceMapConsumer(

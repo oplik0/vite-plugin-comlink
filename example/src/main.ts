@@ -1,4 +1,4 @@
-import { endpointSymbol } from "vite-plugin-comlink/symbol";
+import { endpointSymbol } from "@opliko/vite-plugin-comlink/symbol";
 
 const w = new ComlinkWorker<typeof import('./worker')>(new URL("./worker.ts", import.meta.url))
 const x = w[endpointSymbol]
