@@ -62,7 +62,7 @@ export function comlink(): Plugin[] {
         )
           return;
 
-        const workerSearcher = /(?<new>\bnew\s+)(?<type>ComlinkWorker|ComlinkSharedWorker)(?<new_url>\s*\(\s*new\s+URL\s*\(\s*)['"`]?(?<path>(?=<')[^']+(?=')|(?<=")[^"]+(?=")|(?<=`)[^`]+(?=`)|\w+)['"`]?(?<import_meta>\s*,\s*import\.meta\.url\s*\)\s*|\s*\)\s*)(?<comma>,?)(?<options>[^\)]*)(?<end>\))/g;
+        const workerSearcher = /(?<new>\bnew\s+)(?<type>ComlinkWorker|ComlinkSharedWorker)(?<new_url>\s*\(\s*new\s+URL\s*\(\s*)(?<quote>['"`])?(?<path>(?=<')[^']+(?=')|(?<=")[^"]+(?=")|(?<=`)[^`]+(?=`)|\w+)['"`]?(?<import_meta>\s*,\s*import\.meta\.url\s*\)\s*|\s*\)\s*)(?<comma>,?)(?<options>[^\)]*)(?<end>\))/g;
 
 
         let s: MagicString = new MagicString(code);
@@ -77,6 +77,7 @@ export function comlink(): Plugin[] {
           const c1_new = match.groups["new"]
           const c2_type = match.groups["type"];
           const c3_new_url = match.groups["new_url"];
+          const c4_quote = match.groups["quote"];
           let c4_path = match.groups["path"];
           const c5_import_meta = match.groups["import_meta"];
           const c6_comma = match.groups["comma"];
@@ -85,9 +86,9 @@ export function comlink(): Plugin[] {
 
           const opt = c7_options ? JSON5.parse(c7_options) : {};
 
-          const urlQuote = ['"', '`', "'"].includes(c4_path[0]) ? c4_path[0] : "`";
-          const pathEscapeStart = ['"', "`", "'"].includes(c4_path[0]) ? "" : "${";
-          const pathEscapeEnd = ['"', "`", "'"].includes(c4_path[0]) ? "" : "}";
+          const urlQuote = ['"', "`", "'"].includes(c4_quote) ? c4_quote : "`";
+          const pathEscapeStart = ['"', "`", "'"].includes(c4_quote) ? "" : "${";
+          const pathEscapeEnd = ['"', "`", "'"].includes(c4_quote) ? "" : "}";
 
           if (mode === "development") {
             opt.type = "module";
