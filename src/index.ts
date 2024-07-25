@@ -63,23 +63,25 @@ export function comlink(): Plugin[] {
           return;
 
         const workerSearcher =
-          /(\bnew\s+)(ComlinkWorker|ComlinkSharedWorker)(\s*\(\s*new\s+URL\s*\(\s*)('[^']+'|"[^"]+"|`[^`]+`)(\s*,\s*import\.meta\.url\s*\)\s*)(,?)([^\)]*)(\))/g;
+          /(?<new>\bnew\s+)(?<type>ComlinkWorker|ComlinkSharedWorker)(?<new_url>\s*\(\s*new\s+URL\s*\(\s*)(?<path>'[^']+'|"[^"]+"|`[^`]+`|\w+)(?<import_meta>\s*,\s*import\.meta\.url\s*\)\s*|\s*\)\s*)(?<comma>,?)(?<options>[^\)]*)(?<end>\))/g;
 
         let s: MagicString = new MagicString(code);
 
         const matches = code.matchAll(workerSearcher);
 
         for (const match of matches) {
+          if (!match.groups)
+            continue
           const index = match.index!;
           const matchCode = match[0];
-          const c1_new = match[1];
-          const c2_type = match[2];
-          const c3_new_url = match[3];
-          let c4_path = match[4];
-          const c5_import_meta = match[5];
-          const c6_koma = match[6];
-          const c7_options = match[7];
-          const c8_end = match[8];
+          const c1_new = match.groups["new"]
+          const c2_type = match.groups["type"];
+          const c3_new_url = match.groups["new_url"];
+          let c4_path = match.groups["path"];
+          const c5_import_meta = match.groups["import_meta"];
+          const c6_comma = match.groups["comma"];
+          const c7_options = match.groups["options"];
+          const c8_end = match.groups["end"];
 
           const opt = c7_options ? JSON5.parse(c7_options) : {};
 
